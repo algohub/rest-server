@@ -4,7 +4,6 @@ import org.algohub.rest.domain.User;
 import org.algohub.rest.exception.UserAlreadyExistException;
 import org.algohub.rest.exception.UserNotExistException;
 
-import java.util.Optional;
 
 public interface UserService {
   User create(final User user) throws UserAlreadyExistException;

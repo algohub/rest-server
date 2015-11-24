@@ -5,7 +5,6 @@ import org.algohub.rest.exception.QuestionAlreadyExistException;
 import org.algohub.rest.exception.QuestionNotExistException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface QuestionService {
   Question create(final Question question) throws QuestionAlreadyExistException;

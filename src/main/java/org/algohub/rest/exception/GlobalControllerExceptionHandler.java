@@ -1,7 +1,6 @@
 package org.algohub.rest.exception;
 
 import org.algohub.rest.dto.ErrorMessage;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
