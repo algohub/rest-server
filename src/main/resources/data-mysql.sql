@@ -252,20 +252,17 @@ INSERT IGNORE INTO `country` (`country_code`, `country_name`) VALUES
 
 INSERT IGNORE INTO `language` (`language`) VALUES
   ('English'),
-  ('Chinese');
+  ('Chinese'),
+  ('Japanese'),
+  ('Spanish'),
+  ('German'),
+  ('French');
 
-INSERT IGNORE INTO `user` (`id`,`username`,`password_hash`, `email`, `gender`, `occupation`, `registered_at`,`version`) VALUES
-  (1,'admin','$2a$12$54SgtCEnaUJ8oDl3.anH7eoxpeV7.8JGtozktKOo8al6UWdQO0q/G','admin@algohub.org', 'Male', 'Professional', NOW(), 0);
+INSERT IGNORE INTO `user` (`id`,`username`,`password_hash`, `email`, `gender`, `occupation`, `registered_at`, `admin`,`version`) VALUES
+  (1,'admin','$2a$12$54SgtCEnaUJ8oDl3.anH7eoxpeV7.8JGtozktKOo8al6UWdQO0q/G','admin@algohub.org', 'Male', 'Professional', NOW(), 1, 0);
 INSERT IGNORE INTO `user` (`id`,`username`,`password_hash`, `email`, `gender`, `occupation`, `registered_at`,`version`) VALUES
   (2,'user','$2a$12$tBhNMZvvQh66n2GgczaVUeozVt3LaR/FOsIjyD/pXVN.AxNZdLSmG','user@algohub.org', 'Female', 'Student', NOW(), 0);
 
-INSERT IGNORE INTO `role` (`id`,`name`) VALUES (1,'ROLE_USER');
-INSERT IGNORE INTO `role` (`id`,`name`) VALUES (2,'ROLE_ADMIN');
-INSERT IGNORE INTO `role` (`id`,`name`) VALUES (3,'ROLE_GUEST');
-
-INSERT IGNORE INTO `user_role` (`user_id`, `role_id`) values (1,1);
-INSERT IGNORE INTO `user_role` (`user_id`, `role_id`) values (1,2);
-INSERT IGNORE INTO `user_role` (`user_id`, `role_id`) values (2,1);
 
 INSERT IGNORE INTO `question` (`id`, `json`) VALUES('2-sum', '{"id":"2-sum","title":{"de":"","en":"2Sum","es":"","fr":"","ja":"","pt-BR":"","ru":"","zh-CN":""},"description":{"en":"Given an array of integers, find two numbers such that they add up to a specific target number.\n\nThe function `twoSum` should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.\n\n**Note**: You may assume that each input would have exactly one solution.\n\n**Challenge**: Either of the following solutions are acceptable:\n\n* O(1) Space, O(nlogn) Time\n* O(n) Space, O(n) Time"},"category":"algorithm","tags":["Array","Hash Table"],"level":2,"score":21,"time_limit":10,"memory_limit":32,"related_problems":["3-sum","3-sum-closest","4-sum"],"function":{"name":"twoSum","return":{"type":{"value":"array","element_type":{"value":"int"}},"comment":" Indices of the two numbers"},"parameters":[{"name":"nums","type":{"value":"array","element_type":{"value":"int"}},"comment":"An array of Integer"},{"name":"target","type":{"value":"int"},"comment":"target = numbers[index1] + numbers[index2]"}]},"author":{"name":"soulmachine","email":"soulmachine@gmail.com","website":"http://www.soulmachine.me","github":"https://github.com/soulmachine","facebook":"https://www.facebook.com/soulmachine","linkedin":"http://www.linkedin.com/in/soulmachine","twitter":"https://twitter.com/soulmachine"},"test_cases":[{"input":[[2,7,11,15],9],"output":[1,2]},{"input":[[1,0,-1],-1],"output":[2,3]},{"input":[[1,0,-1],0],"output":[1,3]},{"input":[[1,0,-1],1],"output":[1,2]},{"input":[[1,2,5,6,7,3,5,8,-33,-5,-72,12,-34,100,99],-64],"output":[8,11]},{"input":[[1,2,33,23,2423,33,23,1,7,6,8787,5,33,2,3,-23,-54,-67,100,400],407],"output":[9,20]},{"input":[[-1,-2,-3,-4,-5,-6,-100,-98,-111,-11],-111],"output":[7,10]},{"input":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,9,9,9,10,11,1001,2001,198,201,203,201,999,345,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,4,5,6,1,1,1,1,1,1,1,1,1,1,1,101,1,1,1,1,1,1,1,1],107],"output":[78,90]}],"test_cases_generator":"function testCasesGenerator() {\n\treturn [\n\t{\n\t\tinput: [[2,7,11,15], 9],\n\t\toutput: [1,2]\n\t},\n\t{\n\t\tinput: [[1,0,-1], -1],\n\t\toutput: [2,3]\n\t}\n\t]\ntestCasesGenerator()\n}"}');
 INSERT IGNORE INTO `question` (`id`, `json`) VALUES('stoi', '{"id":"stoi","title":{"de":"","en":"String to Integer (atoi)","es":"","fr":"","ja":"","pt-BR":"","ru":"","zh-CN":""},"description":{"en":"Implement `std::stoi()` to convert a string to an integer.\n\n**Hint**: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.\n\n**Notes**: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front."},"category":"algorithm","tags":["String"],"level":2,"score":21,"time_limit":10,"memory_limit":32,"related_problems":["str-str"],"function":{"name":"myStoi","return":{"type":{"value":"int"},"comment":"An integer"},"parameters":[{"name":"str","type":{"value":"string"},"comment":"A string"}]},"author":{"name":"soulmachine","email":"soulmachine@gmail.com","website":"http://www.soulmachine.me","github":"https://github.com/soulmachine","facebook":"https://www.facebook.com/soulmachine","linkedin":"http://www.linkedin.com/in/soulmachine","twitter":"https://twitter.com/soulmachine"},"test_cases":[{"input":[""],"output":0},{"input":["1"],"output":1},{"input":["+1"],"output":1},{"input":["-1"],"output":-1},{"input":["123"],"output":123},{"input":["-123"],"output":-123},{"input":["+-2"],"output":0},{"input":["010"],"output":10}]}');

@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -82,10 +83,9 @@ public class User implements Serializable {
   @NotNull
   private Boolean enabled;
 
-  @JsonIgnore
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
-  private Set<Role> roles = new HashSet<>();
+  @Column(nullable = false, columnDefinition = "bit(1) DEFAULT 0")
+  @NotNull
+  private Boolean admin;  // ROLE_ADMIN if true
 
   @Column
   @Past
@@ -116,6 +116,8 @@ public class User implements Serializable {
   @PrePersist
   protected void onCreate() {
     registeredAt = new java.sql.Timestamp(System.currentTimeMillis());
+    enabled = false;
+    admin = false;
   }
 
   protected User() {
@@ -133,6 +135,7 @@ public class User implements Serializable {
     this.occupation = occupation;
     this.registeredAt = registeredAt;
     this.enabled = true;
+    this.admin = false;
     this.birthday = birthday;
     this.country = country;
     this.language = language;
@@ -150,6 +153,22 @@ public class User implements Serializable {
     this.occupation = occupation;
     this.registeredAt = new Timestamp(System.currentTimeMillis());
     this.enabled = true;
+    this.admin = false;
+  }
+
+  public org.springframework.security.core.userdetails.User toUserDetails() {
+    return new org.springframework.security.core.userdetails.User(username, passwordHash,
+        this.getAuthorities());
+  }
+
+  public List<GrantedAuthority> getAuthorities() {
+    final String authorityString;
+    if (this.admin) {
+      authorityString = "USER, ADMIN";
+    } else {
+      authorityString = "USER";
+    }
+    return AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString);
   }
 
   public Long getId() {
@@ -220,12 +239,12 @@ public class User implements Serializable {
     this.enabled = enabled;
   }
 
-  public Set<Role> getRoles() {
-    return roles;
+  public Boolean getAdmin() {
+    return admin;
   }
 
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
+  public void setAdmin(Boolean admin) {
+    this.admin = admin;
   }
 
   public Date getBirthday() {

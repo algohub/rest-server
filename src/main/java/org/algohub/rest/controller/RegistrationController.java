@@ -1,11 +1,9 @@
 package org.algohub.rest.controller;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import org.algohub.rest.domain.Role;
 import org.algohub.rest.domain.User;
 import org.algohub.rest.dto.ErrorMessage;
 import org.algohub.rest.dto.UserRegistration;
@@ -27,8 +25,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,12 +63,7 @@ public class RegistrationController {
     boolean captcha = captchaService.validateCaptcha(userRegistration.getCaptcha());
     if (captcha) {
       final User user = userRegistration.getUser();
-      final Set<Role> roles = new HashSet<>();
-      roles.add(new Role("ROLE_USER"));
-      user.setRoles(roles);
-
-      final UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-          user.getUsername(), user.getPasswordHash(), user.getRoles());
+      final UserDetails userDetails = user.toUserDetails();
       final String code = tokenUtils.generateToken(userDetails);
       valueOps.set(REGISTRATION_KEY + user.getUsername(), om.writeValueAsString(user), 15, TimeUnit.MINUTES);
       mailService.sendActivationMail(user.getUsername(), user.getEmail(), code);
@@ -93,8 +84,7 @@ public class RegistrationController {
     }
 
     final User user = om.readValue(json, User.class);
-    final UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-        user.getUsername(), user.getPasswordHash(), user.getRoles());
+    final UserDetails userDetails = user.toUserDetails();
 
     if (tokenUtils.validateToken(token, userDetails)) {
         userService.create(user);
