@@ -1,11 +1,13 @@
 package org.algohub.rest.exception;
 
 
-public class UserNotExistException extends Exception {
-  private final long userId;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-  public UserNotExistException(final long userId) {
-    super(String.format("User with id=%d does not exist ", userId));
-    this.userId = userId;
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public final class UserNotExistException extends Exception {
+
+  public UserNotExistException(String message) {
+    super(message);
   }
 }

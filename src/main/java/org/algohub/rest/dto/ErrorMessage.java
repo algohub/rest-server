@@ -1,36 +1,45 @@
 package org.algohub.rest.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ErrorMessage {
-  private String error;   // error message
-  @JsonProperty("exception_class")
-  private String exceptionClass;  // exceptionClass class name
+  private boolean success;
+  private String message;
+  private String exception;
 
   public ErrorMessage() {}
 
-  public ErrorMessage(String error) {
-    this.error = error;
+  public ErrorMessage(boolean success, String message) {
+    this.success = success;
+    this.message = message;
   }
 
-  public ErrorMessage(String error, String exceptionClass) {
-    this.error = error;
-    this.exceptionClass = exceptionClass;
+  public ErrorMessage(String message, String exception) {
+    this.success = false;
+    this.message = message;
+    this.exception = exception;
   }
 
-  public String getError() {
-    return error;
+  public boolean isSuccess() {
+    return success;
   }
 
-  public void setError(String error) {
-    this.error = error;
+  public void setSuccess(boolean success) {
+    this.success = success;
   }
 
-  public String getExceptionClass() {
-    return exceptionClass;
+  public String getMessage() {
+    return message;
   }
 
-  public void setExceptionClass(String exceptionClass) {
-    this.exceptionClass = exceptionClass;
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public String getException() {
+    return exception;
+  }
+
+  public void setException(String exception) {
+    this.exception = exception;
   }
 }

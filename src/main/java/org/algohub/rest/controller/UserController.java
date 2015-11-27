@@ -2,6 +2,7 @@ package org.algohub.rest.controller;
 
 import org.algohub.rest.domain.User;
 import org.algohub.rest.exception.UserNotExistException;
+import org.algohub.rest.service.TokenService;
 import org.algohub.rest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,37 +17,25 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-  private final UserService userService;
-
   @Autowired
-  public UserController(final UserService userService) {
-    this.userService = userService;
+  private UserService userService;
+  @Autowired
+  private TokenService tokenService;
+
+  @RequestMapping(method = RequestMethod.GET, value = "{username}")
+  public User get(@PathVariable final String username) throws UserNotExistException {
+    return userService.getUserByName(username);
   }
 
-  @RequestMapping(method = RequestMethod.GET, value = "{id}")
-  public User get(@PathVariable final long userId) throws UserNotExistException {
-    this.validateUser(userId);
-    return userService.getUserById(userId);
-  }
-
-  @RequestMapping(method = RequestMethod.PUT, value = "{id}")
-  public User update(@PathVariable final long userId, @RequestBody @Valid final User user)
-      throws UserNotExistException {
-    this.validateUser(userId);
+  @RequestMapping(method = RequestMethod.PUT, value = "{username}")
+  public User update(@PathVariable final String username, @RequestBody @Valid final User user) {
     return userService.update(user);
   }
 
-  @RequestMapping(method = RequestMethod.DELETE, value = "{id}")
-  public void delete(@PathVariable final long userId) throws UserNotExistException {
-    this.validateUser(userId);
-    final User user = userService.getUserById(userId);
+  @RequestMapping(method = RequestMethod.DELETE, value = "{username}")
+  public void delete(@PathVariable final String username) throws UserNotExistException {
+    final User user = userService.getUserByName(username);
     userService.delete(user);
-  }
-
-  private void validateUser(long userId) throws UserNotExistException {
-    final User user = userService.getUserById(userId);
-    if (user == null) {
-      throw new UserNotExistException(userId);
-    }
+    tokenService.revokeAll(user.getUsername());
   }
 }

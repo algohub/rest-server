@@ -40,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
   }
 
-  @Cacheable(cacheNames = "question", key = "#id")
+  @Cacheable(cacheNames = "question", key = "#id", unless = "#result == null")
   @Transactional(readOnly = true)
   public @Valid Question getQuestionById(@NotNull @Size(min = 3, max = 255) final String id) {
     return questionRepository.findOne(id);
@@ -65,7 +65,7 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Transactional(readOnly = true)
-  @Cacheable(cacheNames = "all-question-ids")
+  @Cacheable(cacheNames = "all-question-ids", unless = "#result != null and #result.size() == 0")
   public List<String> findAllIds() {
     final List<String> idList = new ArrayList<>();
     final Iterable<Question> questions = questionRepository.findAll();

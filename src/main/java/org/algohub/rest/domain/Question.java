@@ -13,9 +13,9 @@ import javax.validation.constraints.Size;
 public class Question implements Serializable {
   private static final long serialVersionUID = 50000L;
 
-  @Column(unique=true, nullable = false, length = 255)
+  @Column(unique=true, nullable = false, length = 191)
   @Id
-  @Size(min = 3, max = 255)
+  @Size(min = 3, max = 191)
   private String id;
 
   @Column(unique=true, nullable = false, columnDefinition = "TEXT")

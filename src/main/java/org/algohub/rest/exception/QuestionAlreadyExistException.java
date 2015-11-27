@@ -1,6 +1,10 @@
 package org.algohub.rest.exception;
 
-public class QuestionAlreadyExistException extends Exception {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.CONFLICT)
+public final class QuestionAlreadyExistException extends Exception {
   private final String questionId;
 
   public QuestionAlreadyExistException(final String questionId) {

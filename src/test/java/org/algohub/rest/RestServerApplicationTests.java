@@ -1,5 +1,7 @@
 package org.algohub.rest;
 
+import com.samskivert.mustache.Mustache;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +62,6 @@ public class RestServerApplicationTests {
 	@Test
 	public void contextLoads() {
     assertTrue(2 == 2);
-	}
+  }
 
 }

@@ -1,6 +1,7 @@
 package org.algohub.rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.URL;
@@ -45,12 +46,11 @@ public class User implements Serializable {
 
   @Column(unique=true, nullable = false, length = 16)
   @NotNull
-  @Size(min = 3, max = 16)
-  @Pattern(regexp = "[a-z0-9_-]{3,16}")
+  @Size(min = 4, max = 16)
+  @Pattern(regexp = "[a-z0-9_-]{4,16}")
   private String username;
 
   @Column(name = "password_hash", nullable = false, length = 60)
-  @NotNull
   @Size(min = 60, max = 60)
   @JsonIgnore
   private String passwordHash;
@@ -68,16 +68,22 @@ public class User implements Serializable {
 
   @Column(nullable = false)
   @NotNull
-  private @Version @JsonIgnore Integer version;
+  private @Version Integer version;
 
   @Column(nullable = false, length = 12)
   @Enumerated(EnumType.STRING)
   @NotNull
   private Occupation occupation;
 
+  @JsonProperty("registered_at")
   @Column(name = "registered_at", nullable = false)
   @NotNull
   private java.sql.Timestamp registeredAt;
+
+  @JsonProperty("updated_at")
+  @Column(name = "updated_at", nullable = false)
+  @NotNull
+  private java.sql.Timestamp updatedAt;
 
   @Column(nullable = false, columnDefinition = "bit(1) DEFAULT 1")
   @NotNull
@@ -116,32 +122,19 @@ public class User implements Serializable {
   @PrePersist
   protected void onCreate() {
     registeredAt = new java.sql.Timestamp(System.currentTimeMillis());
-    enabled = false;
+    updatedAt = new java.sql.Timestamp(System.currentTimeMillis());
+    enabled = true;
     admin = false;
+  }
+
+  @PreUpdate
+  protected void onUpdate() {
+    updatedAt = new java.sql.Timestamp(System.currentTimeMillis());
   }
 
   protected User() {
     // no-args constructor required by JPA spec
     // this one is protected since it shouldn't be used directly
-  }
-
-  public User(String username, String passwordHash, String email, Gender gender,
-      Occupation occupation, Timestamp registeredAt, Date birthday, Country country,
-      Language language, Industry industry, String avatar, String website) {
-    this.username = username;
-    this.passwordHash = passwordHash;
-    this.email = email;
-    this.gender = gender;
-    this.occupation = occupation;
-    this.registeredAt = registeredAt;
-    this.enabled = true;
-    this.admin = false;
-    this.birthday = birthday;
-    this.country = country;
-    this.language = language;
-    this.industry = industry;
-    this.avatar = avatar;
-    this.website = website;
   }
 
   public User(String username, String passwordHash, String email, Gender gender,
@@ -151,7 +144,6 @@ public class User implements Serializable {
     this.email = email;
     this.gender = gender;
     this.occupation = occupation;
-    this.registeredAt = new Timestamp(System.currentTimeMillis());
     this.enabled = true;
     this.admin = false;
   }
@@ -161,6 +153,7 @@ public class User implements Serializable {
         this.getAuthorities());
   }
 
+  @JsonIgnore
   public List<GrantedAuthority> getAuthorities() {
     final String authorityString;
     if (this.admin) {
@@ -229,6 +222,14 @@ public class User implements Serializable {
 
   public void setRegisteredAt(Timestamp registeredAt) {
     this.registeredAt = registeredAt;
+  }
+
+  public Timestamp getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(Timestamp updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
   public Boolean getEnabled() {

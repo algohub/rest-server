@@ -24,6 +24,9 @@ public class CaptchaServiceImpl implements CaptchaService {
   private String recaptchaSecret;
 
   private boolean valiateReCaptcha(String response, String remoteip) {
+    if (response == null || response.isEmpty()) return false;
+    if (remoteip == null || remoteip.isEmpty()) return false;
+
     String url = "https://www.google.com/recaptcha/api/siteverify";
     String charset = java.nio.charset.StandardCharsets.UTF_8.name();
 
@@ -53,11 +56,15 @@ public class CaptchaServiceImpl implements CaptchaService {
   }
 
   public boolean validateCaptcha(ObjectNode userResponse) {
+//    return true;
+    if (userResponse == null && userResponse.size() == 0) return false;
+
     final String vendor = userResponse.get("vendor").asText();
     switch (vendor) {
       case "recaptcha": {
         final String response = userResponse.get("response").asText();
         final String remoteip = userResponse.get("remoteip").asText();
+
         return valiateReCaptcha(response, remoteip);
       }
       case "sweetcaptcha":

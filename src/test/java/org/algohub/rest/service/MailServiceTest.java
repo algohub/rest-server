@@ -20,7 +20,7 @@ public class MailServiceTest {
 
   @Test
   public void sendActivationMailTest() {
-//    mailService.sendActivationMail("soulmachine", "soulmachine@gmail.com", "123456xxx");
+//    mailService.sendPasswordResetEmail("soulmachine", "soulmachine@gmail.com", "123456xxx");
     assertEquals(1, 1);
   }
 }
